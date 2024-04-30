@@ -17,13 +17,13 @@ let main argv : int =
     //let do_debug = if argv.Length = 2 then true else false
 
     (* try to parse what they gave us *)
-    let ast_maybe = parse input do_debug
+    let ast_maybe = parse input
 
     (* try to evaluate what we parsed... or not *)
     match ast_maybe with
     | Some ast ->
-        eval ast Map.empty |> ignore
+        printf "%A" (eval ast)
         0
-    | None     ->
+    | None ->
         printfn "Invalid program."
         1
