@@ -1,3 +1,3 @@
-Title(askjdh)
-Ingredients(6 green beans, 6 blue)
-Instructions(5 blue green dots, stir the pots)
+Tit (Salad)
+Ing (1 bunch lettuce, 10 dates, 1 slice blue cheese)
+Ins (rinse and chop lettuce, chop dates and add to salad, crumble and add blue cheese) 
