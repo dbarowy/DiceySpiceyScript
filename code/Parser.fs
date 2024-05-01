@@ -6,7 +6,7 @@ open AST
 let instruction : Parser<Expr> = 
     pleft
         (pbetween 
-            (pstr "Instructions(") 
+            (pstr "Ins (") 
             (pmany1 (pletter <|> pchar ' ' <|> pchar ',' <|> pdigit) |>> (fun e -> Instruction (stringify e))) 
             (pchar ')'))
         pws0
@@ -14,14 +14,14 @@ let instruction : Parser<Expr> =
 let ingredient : Parser<Expr> = 
     pleft
         (pbetween 
-            (pstr "Ingredients(") 
+            (pstr "Ing (") 
             (pmany1 (pletter <|> pchar ' ' <|> pchar ',' <|> pdigit) |>> (fun e -> Ingredient (stringify e))) 
             (pchar ')'))
         pws0
 let title : Parser<Expr> = 
     pleft
         (pbetween 
-            (pstr "Title(") 
+            (pstr "Tit (") 
             (pmany1 pletter |>> (fun e -> Title (stringify e))) 
             (pchar ')'))
         pws0
