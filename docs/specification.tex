@@ -62,27 +62,75 @@
 
 \subsection*{Introduction}
 
-\todo[inline]{Delete this TODO and replace with 2+ paragraphs.}
+This programming language would help the user write recipes. This program would provide an efficient way to turn jots down on a notepad into an easy-to-read recipe. Writing recipes on a notepad or paper is easy for anyone to do. However, pencil can get smudged and ink can wash away when it gets wet. Papers can get lost, dirty, or torn. Thus, digitalizing recipes is a smarter way to preserve recipes, make them easily replicable, and nice to look at. \\
+
+Sometimes it can be a struggle to work with Google Docs or excel to make a nice recipe and it may take more time than the average Joe may have. Furthermore, most people don’t even know what Latex is or how to use it. Through this language, we hope people can simply write out their quick notes about ingredients and instructions, and we will transform their writing into nicely formatted recipes. Our language will take lay man terms and format them into a file of code that can simply be pasted into a latex compiler like overleaf, where one can obtain a nicely downloaded pdf of their recipe. 
+
 
 \subsection*{Design Principles}
 
-\todo[inline]{Delete this TODO and replace with 1+ paragraphs.}
+Aesthetically, we want to make it so that the user can simply enter new lines to separate each step of the recipe without having to type additional “nLine” code segments or "$\backslash$$\backslash$" like syntax. Furthermore, ingredients may be separated simply by commas, which will then be formatted through the language. Instructions on the other hand will be separated by new lines. Other things to guide the design are finding ways to add additional recipes, to form a sort of cookbook style result. We are still developing how someone can change or modify the fonts and font colors and add in additional photos.  
+
 
 \subsection*{Examples}
 
-\todo[inline]{Delete this TODO and replace with 3+ examples and accompanying descriptions.}
+Example 1:\\ 
+Tit (Strawberry Shortcake)\\
+Ing (1 cup flour, 1 egg, 2 strawberries)\\
+Ins (\\
+add 1 egg to a bowl and mix, 30s\\
+add 1 cup flour to bowl and whisk, 30s\\
+chop strawberries)\\\
+
+Example 2: \\
+Tit (Creamy Asparagus Pasta)\\
+Ing (1 lb short pasta, 1 lb asparagus, two tbsp unsalted butter)\\
+Ins (\\
+boil water, 20m\\
+cook pasta, 10m\\
+add asparagus)\\\
+
+Example 3: \\
+Tit (Salad)\\
+Ing (1 bunch lettuce, 10 dates, 1 slice blue cheese)\\
+Ins (\\
+rinse and chop lettuce\\
+chop dates and add to salad\\
+crumble and add blue cheese)\\\
+
+In all of these examples, you can see that every recipe starts with a title. This will be followed by ingredients and then instructions. Each of these sections is labeled and then separated by opening and closing parentheses. As you can see, the ingredients are separated by commas whereas the instructions are separated by new lines. Some of the instructions have commas and then amounts of time at the end. Our eventual goal is to incorporate these times into the steps and calculate total time for the recipe. 
 
 \subsection*{Language Concepts}
 
-\todo[inline]{Delete this TODO and replace with 1+ paragraphs.}
+The user needs to understand the basic format of title, ingredients and instructions. They need to know how to format the code so it reads in–when to use commas versus new lines, when to use parentheses, etc. In terms of primitives, we have the title, ingredients, and instructions. Our language combines these primitives into full recipes. Through this you can create multiple recipes. Each new recipe is delineated by a new title. 
 
 \subsection*{Formal Syntax}
 
-\todo[inline]{Delete this TODO and replace with BNF.}
+\begin{verbatim}
+<expr> ::= <Title> <Ingredients> <Instructions> | <expr><expr>
+<Title> ::= "name of recipe”
+<Ingredients> ::= "something, something, something” 
+<Instructions> ::= "something
+                    something
+                    something”
+\end{verbatim}
 
 \subsection*{Semantics}
 
-\todo[inline]{Delete this TODO and replace with as much text as is needed.}
+Our primitives are a title, ingredients, instructions and our language is able to combine forms of recipes. Values are combined by starting a new formation of title ingredient and instruction. Through this you can create multiple recipes. We are playing with the idea of possibly turning this into easily creating a cookbook. Currently the program produces a LaTeX code. We plan to actually create this LaTeX file in less minimal versions as well as make this LaTeX code more aesthetically pleasing. Right now it goes like this, \\Input: \\
+Tit (Salad) \\
+Ing (1 bunch lettuce, 10 dates, 1 slice blue cheese) \\
+Ins (rinse and chop lettuce, chop dates and add to salad, crumble and add blue cheese) \\
+Output: 
+\begin{verbatim}
+    \documentclass{article}
+    \usepackage{graphicx}
+    \begin{document}
+    \section{Salad}
+    {\Large Ingredients:}\\1 bunch lettuce, 10 dates, 1 slice blue cheese\\
+    {\Large Instructions:}\\rinse and chop lettuce, chop dates and add to salad, crumble and add blue cheese\\
+    \end{document}
+\end{verbatim}
 
 % DO NOT DELETE ANYTHING BELOW THIS LINE
 \end{document}
