@@ -15,9 +15,18 @@ let rec evalRecipe exprList : string =
     | [] -> ""
     | l::ls -> (evalExpr l) + (evalRecipe ls)
 
-let eval recipe : string =
+let rec sortList unsortedRecipe sortedRecipe sortedRecipe = 
+     match unsortedRecipe with
+    | [] -> sortedRecipe
+    | l::ls -> 
+        match l with 
+        | Title(a) -> sortedRecipe. 
+        | Ingredient(b) -> 
+        | Instruction(c) -> 
+
+let eval unsortedRecipe : string =
     @"\documentclass{article}" + "\n" + @"\usepackage{graphicx}" + "\n" + @"\begin{document}" + "\n" + 
-    (evalRecipe recipe)
+    (evalRecipe (sortList unsortedRecipe sortedRecipe))
     + @"\end{document}"
 
 

@@ -12,3 +12,13 @@ type Recipe =
         Instructions: Expr list; 
     }
 
+let STARTINGTITLE = Title "Unnamed Recipe"
+let STARTINGLIST_ING = [];
+let STARTINGLIST_INS = [];
+
+let sortedRecipe : Recipe = 
+    {
+        Title = STARTINGTITLE; 
+        Ingredients = STARTINGLIST_ING; 
+        Instructions = STARTINGLIST_INS;
+    }
