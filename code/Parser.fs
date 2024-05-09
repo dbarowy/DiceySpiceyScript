@@ -3,22 +3,35 @@ module Parser
 open Combinator
 open AST
 
-let instruction : Parser<Expr> = 
+let ingredient2, ingredient = recparser()
+
+let instruction2,instruction = recparser()
+let comma item = pright (pchar ',') item
+let instruction2 = 
+    (pmany1 (pletter <|> pchar ' ' <|> pdigit ) |>> (fun e -> Instruction (stringify e))) 
+
+let instruction =
+    instruction2 <|> instruction2 comma instruction
+let instructions = 
     pleft
         (pbetween 
             (pstr "Ins (") 
-            (pmany1 (pletter <|> pchar ' ' <|> pchar ',' <|> pdigit) |>> (fun e -> Instruction (stringify e))) 
+                instruction
             (pchar ')'))
         pws0
 
-let ingredient : Parser<Expr> = 
+let ingredient2 = 
+    pmany1 (pletter <|> pchar ' ' <|> pdigit) |>> (fun e -> Ingredient (stringify e))
+let ingredient =
+    ingredient2 <|> ingredient2 comma ingredient
+let ingredients = 
     pleft
         (pbetween 
             (pstr "Ing (") 
-            (pmany1 (pletter <|> pchar ' ' <|> pchar ',' <|> pdigit) |>> (fun e -> Ingredient (stringify e))) 
+            (ingredient) 
             (pchar ')'))
         pws0
-let title : Parser<Expr> = 
+let title = 
     pleft
         (pbetween 
             (pstr "Tit (") 
@@ -26,7 +39,7 @@ let title : Parser<Expr> =
             (pchar ')'))
         pws0
 
-let expr = pmany1 (instruction <|> ingredient <|> title)
+let expr = pmany1 (instructions <|> ingredients <|> title)
 
 let parse input =
     // parser
