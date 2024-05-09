@@ -3,17 +3,35 @@ module Evaluator
 open AST
 open System
 
-
-let evalExpr (section) : string =
-    match section with
+let evalTitle (title: Expr) : string =
+    match title with
     | Title(a) -> @"\section{" + a + "}\n" 
-    | Ingredient(b) -> @"{\Large Ingredients:}" + @"\\" + b + @"\\" + "\n"
-    | Instruction(c) -> @"{\Large Instructions:}" + @"\\" + c + @"\\" + "\n"
+    | _ -> 
+        printfn "Title is somehow not a string object"
+        exit(0)
 
-let rec evalRecipe Recipe : string =
-    match exprList with
+let rec evalIngredient (instructions : Expr list) : string =
+    match instructions with 
     | [] -> ""
-    | l::ls -> (evalExpr l) + (evalRecipe ls)
+    | l::ls -> 
+        match l with
+        | Ingredient(a) -> @"{\Large Ingredients:}" + @"\\" + a + @"\\" + "\n" + (evalIngredient ls)
+        | _ -> 
+            printfn "This ingredient is somehow not a string object"
+            exit(0)
+
+let rec evalInstruction (instructions : Expr list) : string =
+    match instructions with 
+    | [] -> ""
+    | l::ls -> 
+        match l with
+        | Instruction(a) -> @"{\Large Instructions:}" + @"\\" + a + @"\\" + "\n" + (evalInstruction ls)
+        | _ -> 
+            printfn "This instruction is somehow not a string object"
+            exit(0)
+
+let evalRecipe (r : Recipe) : string =
+    (evalTitle r.Title) + (evalIngredient r.Ingredients) + (evalInstruction r.Instructions)
 
 let rec sortList (unsortedRecipe : Expr list) (sortedRecipe : Recipe) = 
     match unsortedRecipe with
