@@ -38,10 +38,10 @@ let evalRecipe (r : Recipe) : string =
     @"\begin{mdframed}" + "\n" + @"{\Large\fontfamily{lmdh}\selectfont" + "\n" + "  " + "Ingredients:"
     + @"}" + "\n\n" + "" + @"\begin{itemize}" + "\n" + 
     (evalIngredient r.Ingredients) + 
-    @"\end{itemize}" + "\n" + @"\begin{mdframed}" + "\n"+ 
+    @"\end{itemize}" + "\n" + @"\end{mdframed}" + "\n" + @"\begin{mdframed}" + "\n"+ 
     @"{\Large\fontfamily{lmdh}\selectfont" + "\n" + "  " + "Instructions:"
     + @"}"+ "\n\n" + @"\begin{enumerate}" +
-    (evalInstruction r.Instructions) + @"\end{enumerate}" + "\n" + @"\end{mdframed}" + "\n\n" + @"\end{document}"
+    (evalInstruction r.Instructions) + @"\end{enumerate}" + "\n" + @"\end{mdframed}" + "\n\n" + @"\end{document}" 
                 
 let rec sortList (unsortedRecipe : Expr list list) (sortedRecipe : Recipe) = 
     match unsortedRecipe with
