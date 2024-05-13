@@ -31,9 +31,7 @@ let rec evalInstruction (instructions : Expr list) : string =
             exit(0)
 
 let evalRecipe (r : Recipe) : string =
-    (evalTitle r.Title) + "\n" +
-    (evalIngredient r.Ingredients) + "\n" + 
-    (evalInstruction r.Instructions)
+    (evalTitle r.Title) + (evalIngredient r.Ingredients) + (evalInstruction r.Instructions)
 
 let rec sortList (unsortedRecipe : Expr list) (sortedRecipe : Recipe) = 
     match unsortedRecipe with
@@ -51,7 +49,7 @@ let rec sortList (unsortedRecipe : Expr list) (sortedRecipe : Recipe) =
         | Ingredient(b) -> 
              let r= 
                 {
-                    Title = sortedRecipe.Title;
+                    Title = l;
                     Ingredients = sortedRecipe.Ingredients @ [l];
                     Instructions = sortedRecipe.Instructions;
                 }
@@ -59,7 +57,7 @@ let rec sortList (unsortedRecipe : Expr list) (sortedRecipe : Recipe) =
         | Instruction(c) -> 
              let r= 
                 {
-                    Title = sortedRecipe.Title;
+                    Title = l;
                     Ingredients = sortedRecipe.Ingredients;
                     Instructions = sortedRecipe.Instructions @ [l];
                 }
