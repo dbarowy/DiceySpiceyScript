@@ -5,23 +5,29 @@ open AST
 
 let padl p = pright (pstr ", ") p
 
-let singular: Parser<Expr> = pmany0 (psat (fun c -> c <> ',')) |>> (fun a ->  Instruction(stringify a)) <!> "instruction"
+let singularIns: Parser<Expr> = pmany0 (psat (fun c -> c <> ',')) |>> (fun a ->  Instruction(stringify a)) <!> "instruction"
 
-let inside = pseq (pmany1 (pleft singular (pstr ", " <|> pstr ","))) singular //|>> (fun (is, i) -> is @ [i]) <!> "instructions"
+let insideIns = 
+    pseq (pmany1 (pleft singular (pstr ", " <|> pstr ","))) singular |>> (fun (is, i) -> is @ [i]) <!> "instructions"
 
 let instruction = 
     pleft
         (pbetween 
             (pstr "Ins [") 
-                inside 
+                insideIns 
             (pchar ']'))
         pws0
+
+let singularIng: Parser<Expr> = pmany0 (psat (fun c -> c <> ',')) |>> (fun a ->  Ingredient(stringify a)) <!> "ingredient"
+
+let insideIng = 
+    pseq (pmany1 (pleft singular (pstr ", " <|> pstr ","))) singular |>> (fun (is, i) -> is @ [i]) <!> "ingredients"
 
 let ingredient = 
     pleft
         (pbetween 
             (pstr "Ing [") 
-                inside 
+                insideIng 
             (pchar ']'))
         pws0
 let title = 
