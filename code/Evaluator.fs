@@ -11,7 +11,7 @@ let evalTitle (title: Expr) : string =
         + "\n}" + "\n" + @"\date{}" + "\n" + @"\maketitle" + "\n" + "\n")
     | _ -> 
         printfn "Title is somehow not a string object"
-        exit(0)
+        exit 1
 
 let rec evalIngredient (ingredients : Expr list) : string =
     match ingredients with 
@@ -21,7 +21,7 @@ let rec evalIngredient (ingredients : Expr list) : string =
         | Ingredient(a) -> @"\item " + a  + "\n" + (evalIngredient ls)
         | _ -> 
             printfn "This ingredient is somehow not a string object"
-            exit(0)
+            exit 1
 
 let rec evalInstruction (instructions : Expr list) : string =
     match instructions with 
@@ -31,7 +31,7 @@ let rec evalInstruction (instructions : Expr list) : string =
         | Instruction(a) -> @"\item " + a + "\n" + (evalInstruction ls)
         | _ -> 
             printfn "This instruction is somehow not a string object"
-            exit(0)
+            exit 1
 
 let evalRecipe (r : Recipe) : string =
     (evalTitle r.Title) + 
@@ -78,7 +78,7 @@ let rec sortList (unsortedRecipe : Expr list list) (sortedRecipe : Recipe) =
             | _ -> 
                 printfn "%A" "You have something other than a title, instruction, or ingredient. 
                             Please fix your text to only have Title[], Ing[], or Ins[]." 
-                exit 0
+                exit 1
 
 let eval unsortedRecipe : string =
     @"\documentclass{article}" + "\n" + @"\usepackage[T1]{fontenc}" + "\n" + @"\usepackage{tgbonum}" + "\n"
