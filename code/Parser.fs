@@ -3,26 +3,32 @@ module Parser
 open Combinator
 open AST
 
-let instruction : Parser<Expr> = 
+let padl p = pright (pstr ", ") p
+
+let singular: Parser<Expr> = pmany0 (psat (fun c -> c <> ',')) |>> stringify |>> Instruction <!> "instruction"
+
+let inside: Parser<Expr list> = pseq (pmany1 (pleft singular (pstr ", " <|> pstr ","))) singular (fun (is, i) -> is @ [i]) <!> "instructions"
+
+let instruction = 
     pleft
         (pbetween 
             (pstr "Ins (") 
-            (pmany1 (pletter <|> pchar ' ' <|> pchar ',' <|> pdigit) |>> (fun e -> Instruction (stringify e))) 
+                inside 
             (pchar ')'))
         pws0
 
-let ingredient : Parser<Expr> = 
+let ingredient = 
     pleft
         (pbetween 
             (pstr "Ing (") 
-            (pmany1 (pletter <|> pchar ' ' <|> pchar ',' <|> pdigit) |>> (fun e -> Ingredient (stringify e))) 
+                inside 
             (pchar ')'))
         pws0
-let title : Parser<Expr> = 
+let title = 
     pleft
         (pbetween 
             (pstr "Tit (") 
-            (pmany1 pletter |>> (fun e -> Title (stringify e))) 
+            (pmany1 pletter |>> (fun e -> [Title (stringify e)])) 
             (pchar ')'))
         pws0
 
