@@ -5,13 +5,16 @@ open System
 
 let evalTitle (title: Expr) : string =
     match title with
-    | Title(a) -> @"\section{" + a + "}\n" 
+    | Title(a) ->  
+        ( @"\title{\Huge\fontfamily{lmdh}\selectfont" + "\n" + 
+        a 
+        + "\n}" + "\n" + @"\date{}" + "\n" + "\maketitle" + "\n" + "\n")
     | _ -> 
         printfn "Title is somehow not a string object"
         exit(0)
 
-let rec evalIngredient (instructions : Expr list) : string =
-    match instructions with 
+let rec evalIngredient (ingredients : Expr list) : string =
+    match ingredients with 
     | [] -> ""
     | l::ls -> 
         match l with
@@ -31,7 +34,12 @@ let rec evalInstruction (instructions : Expr list) : string =
             exit(0)
 
 let evalRecipe (r : Recipe) : string =
-    (evalTitle r.Title) + (evalIngredient r.Ingredients) + (evalInstruction r.Instructions)
+    (evalTitle r.Title) + 
+    @"\begin{mdframed}" + "\n" + @"{\Large\fontfamily{lmdh}\selectfont" + "\n" + "  " + "Ingredients:"
+    + @"}" + "\n\n" + "" + @"\begin{itemize}" + "\n" + 
+    (evalIngredient r.Ingredients) + 
+    "\end{itemize}" + "\n\n" + 
+    (evalInstruction r.Instructions)
                 
 let rec sortList (unsortedRecipe : Expr list list) (sortedRecipe : Recipe) = 
     match unsortedRecipe with
@@ -49,9 +57,6 @@ let rec sortList (unsortedRecipe : Expr list list) (sortedRecipe : Recipe) =
                         Instructions = sortedRecipe.Instructions;
                     }
                 sortList bigList r 
-                    // | _ -> 
-                    //     printfn "%A" "There's an issue with the Title evaluator" 
-                    //     exit 0
             | Ingredient(a) ->
                 let r= 
                     {
@@ -74,7 +79,9 @@ let rec sortList (unsortedRecipe : Expr list list) (sortedRecipe : Recipe) =
                 exit 0
 
 let eval unsortedRecipe : string =
-    @"\documentclass{article}" + "\n" + @"\usepackage{graphicx}" + "\n" + @"\begin{document}" + "\n" + 
+    @"\documentclass{article}" + "\n" + @"\usepackage[T1]{fontenc}" + "\n" + @"\usepackage{tgbonum}" + "\n"
+    + @"\usepackage{mdframed}" + "\n" + "\n" +
+    @"\begin{document}" + "\n" + "\n" +
     (evalRecipe (sortList unsortedRecipe sortedRecipe))
     + @"\end{document}"
 

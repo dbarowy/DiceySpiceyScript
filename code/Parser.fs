@@ -8,7 +8,7 @@ let padl p = pright (pstr ", ") p
 let singularIns: Parser<Expr> = pmany0 (psat (fun c -> c <> ',')) |>> (fun a ->  Instruction(stringify a)) <!> "instruction"
 
 let insideIns = 
-    pseq (pmany1 (pleft singular (pstr ", " <|> pstr ","))) singular |>> (fun (is, i) -> is @ [i]) <!> "instructions"
+    pseq (pmany1 (pleft singularIns (pstr ", " <|> pstr ","))) singularIns |>> (fun (is, i) -> is @ [i]) <!> "instructions"
 
 let instruction = 
     pleft
@@ -21,7 +21,7 @@ let instruction =
 let singularIng: Parser<Expr> = pmany0 (psat (fun c -> c <> ',')) |>> (fun a ->  Ingredient(stringify a)) <!> "ingredient"
 
 let insideIng = 
-    pseq (pmany1 (pleft singular (pstr ", " <|> pstr ","))) singular |>> (fun (is, i) -> is @ [i]) <!> "ingredients"
+    pseq (pmany1 (pleft singularIng (pstr ", " <|> pstr ","))) singularIng |>> (fun (is, i) -> is @ [i]) <!> "ingredients"
 
 let ingredient = 
     pleft
