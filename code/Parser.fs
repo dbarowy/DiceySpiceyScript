@@ -5,7 +5,7 @@ open AST
 
 let padl p = pright (pstr ", ") p
 
-let singularIns: Parser<Expr> = pmany0 (psat (fun c -> c <> ','&& c <> ']')) |>> (fun a ->  Instruction(stringify a)) <!> "instruction"
+let singularIns: Parser<Expr> = pmany0 (psat (fun c -> c <> ',' && c <> ']')) |>> (fun a ->  Instruction(stringify a)) <!> "instruction"
 
 let insideIns = 
     pseq (pmany0 (pleft singularIns (pstr ", "))) singularIns (fun (is, i) -> is @ [i]) <!> "instructions"
