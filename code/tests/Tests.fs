@@ -15,4 +15,3 @@ type TestClass () =
             Assert.AreEqual(expected, ws)
         | None ->
             Assert.IsTrue false
-
