@@ -5,20 +5,17 @@ open AST
 
 let padl p = pright (pstr ", ") p
 
-let singularIns: Parser<Expr> = pmany0 (psat (fun c -> c <> ',')) |>> (fun a ->  Instruction(stringify a)) <!> "instruction"
+let singularIns: Parser<Expr> = pmany0 (psat (fun c -> c <> ','&& c <> ']')) |>> (fun a ->  Instruction(stringify a)) <!> "instruction"
 
 let insideIns = 
     pseq (pmany0 (pleft singularIns (pstr ", "))) singularIns (fun (is, i) -> is @ [i]) <!> "instructions"
 //<|> pstr ","
 let instruction = 
     pleft
-        (pbetween 
-            (pstr "ins[") 
-                insideIns 
-            (pchar ']'))
+        (pbetween (pstr "ins[") insideIns (pchar ']'))
         pws0
 
-let singularIng: Parser<Expr> = pmany0 (psat (fun c -> c <> ',')) |>> (fun a ->  Ingredient(stringify a)) <!> "ingredient"
+let singularIng: Parser<Expr> = pmany0 (psat (fun c -> c <> ',' && c <> ']')) |>> (fun a ->  Ingredient(stringify a)) <!> "ingredient"
 
 let insideIng = 
     pseq (pmany0 (pleft singularIng (pstr ", "))) singularIng (fun (is, i) -> is @ [i]) <!> "ingredients"
@@ -34,7 +31,7 @@ let title =
     pleft
         (pbetween 
             (pstr "tit[") 
-            (pmany1 pletter |>> (fun e -> [Title (stringify e)])) 
+            (pmany0 (psat (fun c -> c <> ']')) |>> (fun e -> [Title (stringify e)]))
             (pchar ']'))
         pws0
 
@@ -45,6 +42,6 @@ let parse input =
     let grammar = pleft expr peof
     
     // parse input
-    match grammar (prepare input) with
+    match grammar (debug input) with
     | Success(res,_) -> Some res
     | Failure _ -> None

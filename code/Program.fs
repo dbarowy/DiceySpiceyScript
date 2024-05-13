@@ -27,5 +27,5 @@ let main argv : int =
         printf "%A" (eval ast)
         0
     | None ->
-        printfn "Invalid program."
+        printfn "file contains invalid program"
         1
