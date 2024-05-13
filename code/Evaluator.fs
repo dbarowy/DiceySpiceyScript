@@ -8,7 +8,7 @@ let evalTitle (title: Expr) : string =
     | Title(a) ->  
         ( @"\title{\Huge\fontfamily{lmdh}\selectfont" + "\n" + 
         a 
-        + "\n}" + "\n" + @"\date{}" + "\n" + @"\maketitle" + "\n" + "\n")
+        + "\n}" + "\n" + @"\date{}" + "\n" + "\maketitle" + "\n" + "\n")
     | _ -> 
         printfn "Title is somehow not a string object"
         exit(0)
@@ -18,7 +18,7 @@ let rec evalIngredient (ingredients : Expr list) : string =
     | [] -> ""
     | l::ls -> 
         match l with
-        | Ingredient(a) -> @"\item" + a  + "\n" + (evalIngredient ls)
+        | Ingredient(a) -> @"{\Large Ingredients:}" + @"\\" + a + @"\\" + "\n" + (evalIngredient ls)
         | _ -> 
             printfn "This ingredient is somehow not a string object"
             exit(0)
@@ -28,7 +28,7 @@ let rec evalInstruction (instructions : Expr list) : string =
     | [] -> ""
     | l::ls -> 
         match l with
-        | Instruction(a) -> @"\item" + a + "\n" + (evalInstruction ls)
+        | Instruction(a) -> @"{\Large Instructions:}" + @"\\" + a + @"\\" + "\n" + (evalInstruction ls)
         | _ -> 
             printfn "This instruction is somehow not a string object"
             exit(0)
@@ -38,10 +38,8 @@ let evalRecipe (r : Recipe) : string =
     @"\begin{mdframed}" + "\n" + @"{\Large\fontfamily{lmdh}\selectfont" + "\n" + "  " + "Ingredients:"
     + @"}" + "\n\n" + "" + @"\begin{itemize}" + "\n" + 
     (evalIngredient r.Ingredients) + 
-    @"\end{itemize}" + "\n" + @"\begin{mdframed}" + "\n"+ 
-    @"{\Large\fontfamily{lmdh}\selectfont" + "\n" + "  " + "Instructions:"
-    + @"}"+ "\n\n" + @"\begin{enumerate}" +
-    (evalInstruction r.Instructions) + @"\end{enumerate}" + "\n" + @"\end{mdframed}" + "\n\n" + @"\end{document}"
+    "\end{itemize}" + "\n\n" + 
+    (evalInstruction r.Instructions)
                 
 let rec sortList (unsortedRecipe : Expr list list) (sortedRecipe : Recipe) = 
     match unsortedRecipe with
