@@ -27,7 +27,7 @@ let main argv : int =
         printf "%A" (eval ast)
         0
     | None ->
-        printfn ("file contains invalid program: file should contain format: \n \tTitle(title of recipe)
-        \n \tIngredients(ingredient 1, ingredient 2, ingredient 3, ...)
-        \n \tInstructions(instruction 1, instruction2, instruction 3, ...)")
+        printfn ("file contains invalid program: file should contain format: \n \ttit[title of recipe]
+        \n \ting[ingredient 1, ingredient 2, ingredient 3, ...]
+        \n \tins[instruction 1, instruction2, instruction 3, ...]")
         1
