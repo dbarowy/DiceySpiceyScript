@@ -6,9 +6,9 @@ open System.IO
 let main argv : int =
     (* Check for proper usage *)
     if argv.Length <> 1 && argv.Length <> 2 then
-        printfn "Usage: dotnet run <file> \n file contains format: \n \tTitle(title of recipe)
-        \n \tIngredients(ingredient 1, ingredient 2, ingredient 3, ...)
-        \n \tInstructions(instruction 1, instruction2, instruction 3, ...)"
+        printfn "Usage: dotnet run <file> \n file contains format: \n \ttit[title of recipe]
+        \n \ting[ingredient 1, ingredient 2, ingredient 3, ...]
+        \n \tins[instruction 1, instruction2, instruction 3, ...]"
         exit 1
 
     (* read in the input file *)
