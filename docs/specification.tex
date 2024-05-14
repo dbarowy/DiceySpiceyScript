@@ -52,9 +52,9 @@
 
 % Edit below as instructed
 
-\title{SnappyLanguageName Language Specification} % Replace SnappyLanguageName with your project's name
+\title{DiceySpicyScript Language Specification} % IcySpicyScript, MunchNomNom, TummyTasteScript, HotSpicyJuicyScript
 
-\author{Partner One \and Parnter Two} % Replace these with real partner names.
+\author{Helen Qian \and Maia Wang} % Replace these with real partner names.
 
 \begin{document}
   
@@ -64,73 +64,90 @@
 
 This programming language would help the user write recipes. This program would provide an efficient way to turn jots down on a notepad into an easy-to-read recipe. Writing recipes on a notepad or paper is easy for anyone to do. However, pencil can get smudged and ink can wash away when it gets wet. Papers can get lost, dirty, or torn. Thus, digitalizing recipes is a smarter way to preserve recipes, make them easily replicable, and nice to look at. \\
 
-Sometimes it can be a struggle to work with Google Docs or excel to make a nice recipe and it may take more time than the average Joe may have. Furthermore, most people don’t even know what Latex is or how to use it. Through this language, we hope people can simply write out their quick notes about ingredients and instructions, and we will transform their writing into nicely formatted recipes. Our language will take lay man terms and format them into a file of code that can simply be pasted into a latex compiler like overleaf, where one can obtain a nicely downloaded pdf of their recipe. 
+Sometimes it can be a struggle to work with Google Docs or excel to make a nice recipe and it may take more time than the average Joe may have. Furthermore, most people don’t even know what Latex is or how to use it. Through this language, we hope people can simply write out their quick notes about ingredients and instructions, and we will transform their writing into nicely formatted recipes. No need to waste time trying to order your ingredients separate from your instructions. Simply as you are creating your Michelin star worthy dish just make a note of the ingredient or instruction as you go. Our language will take lay man terms and format them into a file of code that can simply be pasted into a latex compiler like overleaf, where one can obtain a nicely downloaded pdf of their recipe, ingredients and instructions all neatly organized. 
 
 
 \subsection*{Design Principles}
 
-Aesthetically, we want to make it so that the user can simply enter new lines to separate each step of the recipe without having to type additional “nLine” code segments or "$\backslash$$\backslash$" like syntax. Furthermore, ingredients may be separated simply by commas, which will then be formatted through the language. Instructions on the other hand will be separated by new lines. Other things to guide the design are finding ways to add additional recipes, to form a sort of cookbook style result. We are still developing how someone can change or modify the fonts and font colors and add in additional photos.  
+Aesthetically we made choices on how the latex recipe template that is outputted. The ingredient list is bulleted and the instruction list is enumerated. We specifically choose the font Latin Modern Dunhill to give a cozy home baked feel to the recipe. The latex recipe also includes design elements like the ingredients and instruction lists being inboxed. We kept the recipe design simple and easy to read but still aesthetically pleasing.
 
 
 \subsection*{Examples}
 
 Example 1:\\ 
-Tit (Strawberry Shortcake)\\
-Ing (1 cup flour, 1 egg, 2 strawberries)\\
-Ins (\\
+tit[Strawberry Shortcake]\\
+ing[1 cup flour, 1 egg, 2 strawberries]\\
+ins[
 add 1 egg to a bowl and mix, 30s\\
 add 1 cup flour to bowl and whisk, 30s\\
-chop strawberries)\\\
+chop strawberries]\\\
 
 Example 2: \\
-Tit (Creamy Asparagus Pasta)\\
-Ing (1 lb short pasta, 1 lb asparagus, two tbsp unsalted butter)\\
-Ins (\\
-boil water, 20m\\
-cook pasta, 10m\\
-add asparagus)\\\
+ins[boil water, 20m cook pasta, 10m, add asparagus]\\\
+tit[Creamy Asparagus Pasta]\\
+ing[1 lb short pasta, 1 lb asparagus, two tbsp unsalted butter]\\
 
 Example 3: \\
-Tit (Salad)\\
-Ing (1 bunch lettuce, 10 dates, 1 slice blue cheese)\\
-Ins (\\
-rinse and chop lettuce\\
-chop dates and add to salad\\
-crumble and add blue cheese)\\\
+ing[1 bunch lettuce] \\
+ins[rinse and chop lettuce in a bowl]\\
+ing[10 dates]\\
+ins[chop dates in half and add to bowl]\\
+ing[1 slice blue cheese, 1 cucumber, 2 firm tomatoes]\\
+ing[crumble and add blue cheese to bowl, slice up cucumber and add to bowl, slice tomatoes into fourths or even smaller pieces and add to bowl] \\
+ing[Italian dressing] \\
+ins[mix italian dressing evenly into salad, and enjoy!]\\
+tit[Helen's easy salad]\\
 
-In all of these examples, you can see that every recipe starts with a title. This will be followed by ingredients and then instructions. Each of these sections is labeled and then separated by opening and closing parentheses. As you can see, the ingredients are separated by commas whereas the instructions are separated by new lines. Some of the instructions have commas and then amounts of time at the end. Our eventual goal is to incorporate these times into the steps and calculate total time for the recipe. 
+%need to make files for each example
+
+In all of these examples you can see either the title, ingredient(s) or instruction(s) are specified then followed by opening and closing square brackets with content inside. When specifying, the title will be labeled with abbreviation tit, ingredient with ing, instruction with ins. To add a program that contains more than one ingredient or instruction under one label (ing [], ins []), add a comma after each content item. \\
+
+Place your programs in a text file and run by inputting: \\
+\begin{verbatim}
+    dotnet run <example>.txt
+\end{verbatim}
+
 
 \subsection*{Language Concepts}
 
-The user needs to understand the basic format of title, ingredients and instructions. They need to know how to format the code so it reads in–when to use commas versus new lines, when to use parentheses, etc. In terms of primitives, we have the title, ingredients, and instructions. Our language combines these primitives into full recipes. Through this you can create multiple recipes. Each new recipe is delineated by a new title. 
+The user needs to understand the basic format of title, ingredients and instructions. They need to know how to format the code so it reads in–when to use commas versus new lines, when to use parentheses, etc. In terms of primitives, we have the title, ingredients, and instructions. Our language combines these primitives into a full recipe. For specifying titles, only the title specified latest will be taken in as the recipe name.
+
+
+% make sure were still doing by new title
 
 \subsection*{Formal Syntax}
 
 \begin{verbatim}
-<expr> ::= <Title> <Ingredients> <Instructions> | <expr><expr>
+<Recipe> ::= <expr> | List of <expr>
+<expr> ::= <Title> | <Ingredients> | <Instructions> | <expr><expr>
 <Title> ::= "name of recipe”
-<Ingredients> ::= "something, something, something” 
-<Instructions> ::= "something
-                    something
-                    something”
+<Ingredient> ::= "ingredient1, ingredient2, ingredient3” | "ingredient"
+<Instruction> ::= "instruction”
 \end{verbatim}
 
 \subsection*{Semantics}
 
-Our primitives are a title, ingredients, instructions and our language is able to combine forms of recipes. Values are combined by starting a new formation of title ingredient and instruction. Through this you can create multiple recipes. We are playing with the idea of possibly turning this into easily creating a cookbook. Currently the program produces a LaTeX code. We plan to actually create this LaTeX file in less minimal versions as well as make this LaTeX code more aesthetically pleasing. Right now it goes like this, \\Input: \\
-Tit (Salad) \\
-Ing (1 bunch lettuce, 10 dates, 1 slice blue cheese) \\
-Ins (rinse and chop lettuce, chop dates and add to salad, crumble and add blue cheese) \\
-Output: 
-\begin{verbatim}
-    \documentclass{article}
-    \usepackage{graphicx}
-    \begin{document}
-    \section{Salad}
-    {\Large Ingredients:}\\1 bunch lettuce, 10 dates, 1 slice blue cheese\\
-    {\Large Instructions:}\\rinse and chop lettuce, chop dates and add to salad, crumble and add blue cheese\\
-    \end{document}
-\end{verbatim}
+\begin{center}
+  \begin{tabular}{c|c|c}
+    Syntax & Type & Meaning  \\
+    \hline
+    title & string & a primitive that represents the title of a recip \\
+    \hline
+    ingredient & string & a primitive that represents an ingredient or set of ingredients \\
+    \hline
+    instruction & string & a primitive that represents an instruction or set of instructions in a recipe \\
+    \hline 
+    recipe & {string, string list, string list} & a recipe containing a title, list of ingredients, and list of instructions
+  \end{tabular}
+\end{center}
+
+\subsection{Remaining Work}
+
+To further enhance this language we could make the latex recipe template more personalizable. Like say the user would like to have a certain font or color. Maybe even going further and allowing them to choose from different templates. We played with the idea of letting them create a cookbook and are continuing to play on ideas of how they would specify a new recipe. In prior drafts we said the user would be able to create a new recipe by adding another label of a title, however we changed this because we wanted the user to be able to change the title if they misspecified it. \\
+
+We mentioned providing an overall time for the recipe which would be added from the given times for each instruction. We ultimately decided against this though because that would mean changing the language entirely and require users to enter in time frames for the instructions. This kind of goes against our thought of writing an easy fast program as users would have to calculate the amount of time something took them. Not fun for when you are experimenting.\\
+
+Something else we could also work more on is just returning a pdf. This way the user doesn't even have to put the output into latex, their just are given a pdf.
 
 % DO NOT DELETE ANYTHING BELOW THIS LINE
 \end{document}
