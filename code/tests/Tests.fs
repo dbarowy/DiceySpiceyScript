@@ -4,28 +4,27 @@ open Microsoft.VisualStudio.TestTools.UnitTesting
 open Parser
 open Evaluator
 open AST
+open Combinator
 
 [<TestClass>]
 type TestClass () =
     [<TestMethod>]
     member this.ingredient () =
         let input = "ing[lettuce, corn, beef, chips]"
-        let expected = [ [Instruction("lettuce")] ; [Instruction("corn")] ; [Instruction("beef")] ; [Instruction("chips")]]
-        let result = parse input
+        let expected = [[Ingredient("lettuce") ; Ingredient("corn") ; Ingredient("beef") ; Ingredient("chips")]]
+        let result = parse ( input)
         match result with
         | Some ws ->
             Assert.AreEqual(expected, ws)
         | None ->
             Assert.IsTrue false
 
-    // [<TestMethod>]
-    //     member this.evalIngredient () =
-    //         let input = "ing[lettuce, corn, beef, chips]"
-    //         let expected = [ @"\item lettuce \n"; @"\item corn \n"; @"\item beef \n"; @"\item chips \n"]
-    //         let result = parse (input)
-    //         match result with
-    //         | Some ws ->
-    //             Assert.AreEqual(expected, ws)
-    //         | None ->
-    //             Assert.IsTrue false
+            
+    [<TestMethod>]
+        member this.evalIngredient () =
+            let input = Title("cake")
+            let expected = @"\title{\Huge\fontfamily{lmdh}\selectfont" + "\n" + "cake" + "\n}" + "\n" + @"\date{}" + "\n" + @"\maketitle" + "\n" + "\n"
+            let result2 = evalTitle (input)
+            Assert.AreEqual(expected, result2)
+            
 

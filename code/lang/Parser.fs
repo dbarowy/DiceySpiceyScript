@@ -42,6 +42,6 @@ let parse input =
     let grammar = pleft expr peof
     
     // parse input
-    match grammar (debug input) with
+    match grammar (prepare input) with
     | Success(res,_) -> Some res
     | Failure _ -> None
