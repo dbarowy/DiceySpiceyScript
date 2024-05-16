@@ -1,5 +1,1 @@
-ins[boil water, cook pasta] 
-ins[add asparagus] 
-tit[Creamy Asparagus Pasta] 
-ing[1 lb short pasta] 
-ing[1 lb asparagus, two tbsp unsalted butter]
+ins[boil water, cook pasta] ins[add asparagus] tit[Creamy Asparagus Pasta] ing[1 lb short pasta] ing[1 lb asparagus, two tbsp unsalted butter]
