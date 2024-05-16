@@ -4,11 +4,12 @@ open System.IO
 open System.Diagnostics
 open System.Threading.Tasks
 
+(* executeCommand from alexandru nedelcu https://alexn.org/blog/2020/12/06/execute-shell-command-in-fsharp/*)
 type CommandResult =
   { ExitCode: int
     StandardOutput: string
     StandardError: string }
-
+ 
 let executeCommand executable args =
   async {
     let! ct = Async.CancellationToken
@@ -54,8 +55,12 @@ let main argv : int =
     let file = argv.[0]
     let input = File.ReadAllText file
 
-    (* does the user want parser debugging turned on? *)
+    (* parser debugger *)
     //let do_debug = if argv.Length = 2 then true else false
+
+    (* Extract the base file name (without extension) *)
+    let baseName = Path.GetFileNameWithoutExtension(file)
+    let texFileName = baseName + ".tex"
 
     (* try to parse what they gave us *)
     let ast_maybe = parse input
@@ -64,10 +69,10 @@ let main argv : int =
     match ast_maybe with
     | Some ast ->
         let s= (eval ast)
-        File.WriteAllText("temp2.tex",s)
-        printf "%A" "latex code added" //(eval ast)
+        File.WriteAllText(texFileName,s)
+
         // Execute pdflatex command
-        let pdflatexCommand = "pdflatex -interaction=nonstopmode temp2.tex"
+        let pdflatexCommand = sprintf "pdflatex -interaction=nonstopmode %s" texFileName
         let result = executeShellCommand pdflatexCommand |> Async.RunSynchronously
 
         if result.ExitCode = 0 then
@@ -79,95 +84,3 @@ let main argv : int =
     | None ->
         printfn "Invalid program."
         1
-
-// type CommandResult = 
-//         {
-//             ExitCode: int;
-//             StandardOutput: string;
-//             StandardError: string
-//         }
-
-// let executeCommand executable args : CommandResult =
-//         async {
-//             let! ct = Async.CancellationToken
-
-//             let startInfo = ProcessStartInfo()
-//             startInfo.FileName <- executable
-//             startInfo.RedirectStandardOutput <- true
-//             startInfo.RedirectStandardError <- true
-//             startInfo.UseShellExecute <- false
-//             startInfo.CreateNoWindow <- true
-//             for a in args do
-//             startInfo.ArgumentList.Add(a)
-
-//             use p = new Process()
-//             p.StartInfo <- startInfo
-//             p.Start() |> ignore
-
-//             let outTask =
-//                 Task.WhenAll([|
-//                     p.StandardOutput.ReadToEndAsync(ct);
-//                     p.StandardError.ReadToEndAsync(ct) |])
-
-//             do! p.WaitForExitAsync(ct) |> Async.AwaitTask
-//             let! out = outTask |> Async.AwaitTask
-
-//             return 
-//               { ExitCode = p.ExitCode
-//                 StandardOutput = out.[0]
-//                 StandardError = out.[1] 
-//               }
-//         }
-
-
-// let executeShellCommand command =
-//     executeCommand "/usr/bin/env" [ "-S"; "bash"; "-c"; command ]
-
-
-// [<EntryPoint>]
-// let main argv : int =
-
-//     (* Check for proper usage *)
-//     if argv.Length <> 1 && argv.Length <> 2 then
-//         printfn "Usage: dotnet run <file> \n file contains format: \n \ttit[title of recipe]
-//         \n \ting[ingredient 1, ingredient 2, ingredient 3, ...]
-//         \n \tins[instruction 1, instruction2, instruction 3, ...]"
-//         exit 1
-
-//     (* read in the input file *)
-//     let file = argv.[0]
-//     let input = File.ReadAllText file
-
-//     (* does the user want parser debugging turned on? *)
-//     //let do_debug = if argv.Length = 2 then true else false
-
-//     (* try to parse what they gave us *)
-//     let ast_maybe = parse input
-
-//     (* try to evaluate what we parsed... or not *)
-//     match ast_maybe with
-//     | Some ast ->
-//         printf "%A" (eval ast)
-//         0
-//     | None ->
-//         printfn ("file contains invalid program: file should contain format: \n \ttit[title of recipe]
-//         \n \ting[ingredient 1, ingredient 2, ingredient 3, ...]
-//         \n \tins[instruction 1, instruction2, instruction 3, ...]")
-//         1
-
-    // match ast_maybe with
-    // | Some ast ->
-    //     let s= (eval ast)
-    //     File.WriteAllText("temp2.tex",s)
-    //     //let r = executeShellCommand "pdflatex"
-    //     // if r.ExitCode = 0 then
-    //     //    //printfn "%s" r.StandardOutput
-    //     // else
-    //     //     eprintfn "%A" "error"
-    //     //     exit 1
-    //     0
-    // | None ->
-    //     printfn ("file contains invalid program: file should contain format: \n \ttit[title of recipe]
-    //     \n \ting[ingredient 1, ingredient 2, ingredient 3, ...]
-    //     \n \tins[instruction 1, instruction2, instruction 3, ...]")
-    //     1
