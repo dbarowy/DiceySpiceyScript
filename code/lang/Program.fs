@@ -46,41 +46,53 @@ let executeShellCommand command =
 
 [<EntryPoint>]
 let main argv : int =
-    (* Check for proper usage *)
-    if argv.Length <> 1 && argv.Length <> 2 then
-        printfn "Usage: dotnet run <file> [debug]"
-        exit 1
+  (* Check for proper usage *)
+  let usage() = 
+    printfn "%A" "Usage: dotnet run <file> \n file contains format: \n \tTitle(title of recipe)
+            \n \tIngredients(ingredient 1, ingredient 2, ingredient 3, ...)
+            \n \tInstructions(instruction 1, instruction2, instruction 3, ...)"
+    exit 1
+      
+  if argv.Length <> 1 && argv.Length <> 2 then usage()
 
-    (* read in the input file *)
-    let file = argv.[0]
-    let input = File.ReadAllText file
+  (* read in the input file *)
+  let filename = argv.[0]
 
-    (* parser debugger *)
-    //let do_debug = if argv.Length = 2 then true else false
+  (* check if is file *)
+  if not (File.Exists(filename)) then
+        printfn "Error: File '%s' not found." filename
+        usage()
+    
+  (* read in the input file *)
+  let file = argv.[0]
+  let input = File.ReadAllText file
+
+  (* parser debugger *)
+  //let do_debug = if argv.Length = 2 then true else false
 
     (* Extract the base file name (without extension) *)
-    let baseName = Path.GetFileNameWithoutExtension(file)
-    let texFileName = baseName + ".tex"
+  let baseName = Path.GetFileNameWithoutExtension(file)
+  let texFileName = baseName + ".tex"
 
     (* try to parse what they gave us *)
-    let ast_maybe = parse input
+  let ast_maybe = parse input
 
     (* try to evaluate what we parsed... or not *)
-    match ast_maybe with
-    | Some ast ->
-        let s= (eval ast)
-        File.WriteAllText(texFileName,s)
+  match ast_maybe with
+  | Some ast ->
+      let s= (eval ast)
+      File.WriteAllText(texFileName,s)
 
-        // Execute pdflatex command
-        let pdflatexCommand = sprintf "pdflatex -interaction=nonstopmode %s" texFileName
-        let result = executeShellCommand pdflatexCommand |> Async.RunSynchronously
+      // Execute pdflatex command
+      let pdflatexCommand = sprintf "pdflatex -interaction=nonstopmode %s" texFileName
+      let result = executeShellCommand pdflatexCommand |> Async.RunSynchronously
 
-        if result.ExitCode = 0 then
-            printfn "PDF generated successfully:\n%s" result.StandardOutput
-        else
-            eprintfn "Error generating PDF:\n%s" result.StandardError
-            exit 1
-        0
-    | None ->
-        printfn "Invalid program."
-        1
+      if result.ExitCode = 0 then
+          printfn "PDF generated successfully:\n%s" result.StandardOutput
+      else
+          eprintfn "Error generating PDF:\n%s" result.StandardError
+          exit 1
+      0
+  | None ->
+      printfn "Invalid program."
+      1
