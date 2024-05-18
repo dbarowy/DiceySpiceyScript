@@ -4,7 +4,7 @@ open System.IO
 open System.Diagnostics
 open System.Threading.Tasks
 
-(* executeCommand from alexandru nedelcu https://alexn.org/blog/2020/12/06/execute-shell-command-in-fsharp/*)
+(* executeCommand from alexandru nedelcu https://alexn.org/blog/2020/12/06/execute-shell-command-in-fsharp/ *)
 type CommandResult =
   { ExitCode: int
     StandardOutput: string
